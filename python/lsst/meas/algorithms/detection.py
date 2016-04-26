@@ -29,6 +29,7 @@ import lsst.afw.image as afwImage
 import lsst.afw.math as afwMath
 import lsst.afw.table as afwTable
 import lsst.pex.config as pexConfig
+# TODO
 import lsst.pex.logging as pexLogging
 import lsst.pipe.base as pipeBase
 
@@ -463,8 +464,8 @@ into your debug.py file and run measAlgTasks.py with the \c --debug flag.
         fpSets.numNeg = len(fpSets.negative.getFootprints()) if fpSets.negative is not None else 0
 
         if self.config.thresholdPolarity != "negative":
-            self.log.log(self.log.INFO, "Detected %d positive sources to %g sigma." %
-                         (fpSets.numPos, self.config.thresholdValue*self.config.includeThresholdMultiplier))
+            self.log.info("Detected %d positive sources to %g sigma.",
+                          fpSets.numPos, self.config.thresholdValue*self.config.includeThresholdMultiplier)
 
         if self.config.doTempLocalBackground:
             maskedImage += tempLocalBkgdImage
@@ -475,11 +476,11 @@ into your debug.py file and run measAlgTasks.py with the \c --debug flag.
             bkgd = getBackground(mi, self.config.background)
 
             if self.config.adjustBackground:
-                self.log.log(self.log.WARN, "Fiddling the background by %g" % self.config.adjustBackground)
+                self.log.warn("Fiddling the background by %g", self.config.adjustBackground)
 
                 bkgd += self.config.adjustBackground
             fpSets.background = bkgd
-            self.log.log(self.log.INFO, "Resubtracting the background after object detection")
+            self.log.info("Resubtracting the background after object detection")
 
             mi -= bkgd.getImageF()
             del mi
@@ -491,9 +492,9 @@ into your debug.py file and run measAlgTasks.py with the \c --debug flag.
                 del mask
             fpSets.negative = None
         else:
-            self.log.log(self.log.INFO, "Detected %d negative sources to %g %s" %
-                         (fpSets.numNeg, self.config.thresholdValue,
-                          ("DN" if self.config.thresholdType == "value" else "sigma")))
+            self.log.info("Detected %d negative sources to %g %s",
+                         fpSets.numNeg, self.config.thresholdValue,
+                          ("DN" if self.config.thresholdType == "value" else "sigma"))
 
         if display:
             ds9.mtv(exposure, frame=0, title="detection")
@@ -598,6 +599,7 @@ def getBackground(image, backgroundConfig, nx=0, ny=0, algorithm=None):
     """
     backgroundConfig.validate();
 
+    # TODO
     logger = pexLogging.getDefaultLog()
     logger = pexLogging.Log(logger,"lsst.meas.algorithms.detection.getBackground")
 
@@ -623,6 +625,7 @@ def getBackground(image, backgroundConfig, nx=0, ny=0, algorithm=None):
                             backgroundConfig.ignoredPixelMask, 0x0))
     sctrl.setNanSafe(backgroundConfig.isNanSafe)
 
+    # TODO: deprecate pexLogging Debug
     pl = pexLogging.Debug("lsst.meas.algorithms.detection.getBackground")
     pl.debug(3, "Ignoring mask planes: %s" % ", ".join(backgroundConfig.ignoredPixelMask))
 
