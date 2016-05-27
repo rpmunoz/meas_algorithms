@@ -171,6 +171,10 @@ class LoadReferenceObjectsTask(pipeBase.Task):
     ConfigClass = LoadReferenceObjectsConfig
     _DefaultName = "LoadReferenceObjects"
 
+    def __init__(self, butler=None, *args, **kwargs):
+        pipeBase.Task.__init__(self, *args, **kwargs)
+        self.butler = butler
+
     @pipeBase.timeMethod
     def loadPixelBox(self, bbox, wcs, filterName=None, calib=None):
         """!Load reference objects that overlap a pixel-based rectangular region
